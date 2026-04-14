@@ -1,6 +1,9 @@
 package org.example;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GiveNextDateTest {
@@ -135,10 +138,55 @@ public class GiveNextDateTest {
         assertEquals("Invalid Input Date", date.run());
     }
 
-    @Test
-    public void testMonthNotCovered() {
-        // July (7) is not included in any of the if/else statements
-        GiveNextDate date = new GiveNextDate(7, 15, 1900);
-        assertEquals("7/16/1900", date.run());
+    @ParameterizedTest
+    @CsvSource({
+            "4, 15, 4/16/1900",
+            "6, 15, 6/16/1900",
+            "9, 15, 9/16/1900",
+            "11, 15, 11/16/1900",
+    })
+    public void testAllThirtyDayMonths_MidDay(int month, int day, String expectedDate) {
+        GiveNextDate date = new GiveNextDate(month, day, 1900);
+        assertEquals(expectedDate, date.run());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "4, 30, 5/1/1900",
+            "6, 30, 7/1/1900",
+            "9, 30, 10/1/1900",
+            "11, 30, 12/1/1900",
+    })
+    public void testAllThirtyDayMonths_LastDay(int month, int day, String expectedDate) {
+        GiveNextDate date = new GiveNextDate(month, day, 1900);
+        assertEquals(expectedDate, date.run());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1, 15, 1/16/1900",
+            "3, 15, 3/16/1900",
+            "5, 15, 5/16/1900",
+            "7, 15, 7/16/1900",
+            "8, 15, 8/16/1900",
+            "10, 15, 10/16/1900"
+    })
+    public void testAllThirtyOneDayMonths_MidDay(int month, int day, String expectedDate) {
+        GiveNextDate date = new GiveNextDate(month, day, 1900);
+        assertEquals(expectedDate, date.run());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1, 31, 2/1/1900",
+            "3, 31, 4/1/1900",
+            "5, 31, 6/1/1900",
+            "7, 31, 8/1/1900",
+            "8, 31, 9/1/1900",
+            "10, 31, 11/1/1900"
+    })
+    public void testAllThirtyOneDayMonths_LastDay(int month, int day, String expectedDate) {
+        GiveNextDate date = new GiveNextDate(month, day, 1900);
+        assertEquals(expectedDate, date.run());
     }
 }
